@@ -18,8 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void register(View v) {
         Intent i_register=new Intent(MainActivity.this,Register.class);
-        startActivity(i_register);
-
+        startActivity(i_register);// bắt đầu activity Register thông qua intent
     }
 
     public void display_no(View v) {
