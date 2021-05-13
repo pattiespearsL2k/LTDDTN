@@ -9,21 +9,45 @@
     </uses-permission>
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.WoMen">
-        <meta-data
-            android:name="com.google.android.actions"
-            android:resource="@xml/Android" />
+        android:label="@string/app_name">
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name="com.lttn.womenapp.MainActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.lttn.womenapp.Register"
+            android:parentActivityName="com.lttn.womenapp.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.lttn.womenapp.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.lttn.womenapp.Display"
+            android:parentActivityName="com.lttn.womenapp.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.lttn.womenapp.MainActivity" />
+        </activity>
+        <service android:name="com.lttn.womenapp.BgService" />
+        <activity
+            android:name="com.lttn.womenapp.Instructions"
+            android:parentActivityName="com.lttn.womenapp.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.lttn.womenapp.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.lttn.womenapp.Verify"
+            android:parentActivityName="com.lttn.womenapp.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.lttn.womenapp.MainActivity" />
         </activity>
     </application>
 

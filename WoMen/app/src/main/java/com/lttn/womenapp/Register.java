@@ -23,6 +23,7 @@ public class Register extends Activity {
         //Toast.makeText(getApplicationContext(), "Activity created",Toast.LENGTH_LONG).show();
 
     }
+    //bengoc
 
 
 
@@ -37,6 +38,7 @@ public class Register extends Activity {
         startActivity(i_help);
 
     }
+//hihi
 
     public void storeInDB(View v) {
         Toast.makeText(getApplicationContext(), "save started",Toast.LENGTH_LONG).show();

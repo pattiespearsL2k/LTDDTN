@@ -38,8 +38,8 @@ public class Display extends Activity {
             buffer.append("Number: "+c.getString(1)+"\n");
         }
         showMessage("Details", buffer.toString());
-        Intent i_startservice=new Intent(Display.this,BgService.class);
-        startService(i_startservice);
+      //  Intent i_startservice=new Intent(Display.this,BgService.class);
+      //  startService(i_startservice);
 
 
     }
