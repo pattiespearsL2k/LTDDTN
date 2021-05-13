@@ -60,8 +60,6 @@ public class Register extends Activity {
             Toast.makeText(getApplicationContext(), "Successfully Saved",Toast.LENGTH_SHORT).show();
         }
         else {
-
-            db.execSQL("INSERT INTO details VALUES('"+str_name+"','"+str_number+"');");
             Toast.makeText(getApplicationContext(), "Maximun Numbers limited reached. Previous numbers are replaced.",Toast.LENGTH_SHORT).show();
         }
 
