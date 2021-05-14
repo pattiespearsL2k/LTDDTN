@@ -31,6 +31,7 @@
         android:layout_alignLeft="@+id/button1"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="15dp"
+        android:text="@string/help"
 
     />
 
