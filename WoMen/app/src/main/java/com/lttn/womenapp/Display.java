@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.app.AlertDialog.Builder;
 
-
+//display
 public class Display extends Activity {
 
     Cursor c;
