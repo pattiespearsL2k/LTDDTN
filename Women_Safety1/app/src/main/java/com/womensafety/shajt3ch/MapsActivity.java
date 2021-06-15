@@ -38,6 +38,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 //abc
+    //xyz
     private GoogleMap mMap;
     double latitude;
     double longitude;
@@ -193,7 +194,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         //Place current location marker
-        //Place current location marker
+      //get address
         latitude = location.getLatitude();
         longitude = location.getLongitude();
         try{
