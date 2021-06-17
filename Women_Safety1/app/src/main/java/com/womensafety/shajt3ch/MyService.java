@@ -12,6 +12,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build.VERSION;
@@ -25,6 +28,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.sac.speech.DefaultLoggerDelegate;
 import com.sac.speech.DelayedOperation;
 import com.sac.speech.GoogleVoiceTypingDisabledException;
@@ -38,12 +46,42 @@ import com.sac.speech.TtsProgressListener;
 import com.tbruyelle.rxpermissions.RxPermissions;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 
 public class MyService extends Service implements SpeechDelegate, Speech.stopDueToDelay {
 
     public static SpeechDelegate delegate;
+    private FusedLocationProviderClient mFusedLocationClient;
+    public double latitude=0.0;
+    public double longitude=0.0;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mFusedLocationClient.getLastLocation().addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                Location location = task.getResult();
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+                // Log.d("TESTMAP", "mFusedLocationClient: " + latitude + ", " + longitude);
+
+            }
+        });
+    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -117,53 +155,50 @@ public class MyService extends Service implements SpeechDelegate, Speech.stopDue
 
             Toast.makeText(this, "You Said : " + result, Toast.LENGTH_SHORT).show();
             if (result.contains("help")  || result.contains("alo")) {
-                //Toast.makeText(this, "Help mode activated ", Toast.LENGTH_SHORT).show();
                 Toast.makeText(this, "Help mode activated ", Toast.LENGTH_SHORT).show();
 
-                    // Toast.makeText(getApplicationContext(),GPS.address, Toast.LENGTH_LONG).show();
+                SQLiteDatabase db2 = this.openOrCreateDatabase("NumberDB", MODE_PRIVATE, null);
+                Log.d("Number is:", Register.getNumber(db2));
+                Cursor c = db2.rawQuery("SELECT * FROM details", null);
+                while (c.moveToNext()) {
+                    String num = c.getString(1);//gia tri sdt
+                    SmsManager smsManager = SmsManager.getDefault();
+                    String add= getCompleteAddressString(MapsActivity.latitude, MapsActivity.longitude);
+                    smsManager.sendTextMessage("034578", null,
+                            "Please help me. I need help immediately. This is where i am now: "+MapsActivity.latitude+","+MapsActivity.longitude+" with address: "+add, null, null);
+                    Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
+                    Intent callIntent = new Intent(Intent.ACTION_CALL);
+                    callIntent.setData(Uri.parse("tel:"+num));
+                    startActivity(callIntent);
 
-                    // Intent intent = getIntent();
-                    //  String data = intent.getStringExtra("key");
-                    // Log.d("key", data);
-                    SQLiteDatabase db2 = this.openOrCreateDatabase("NumberDB", MODE_PRIVATE, null);
-                    Log.d("Number is:", Register.getNumber(db2));
-                    Cursor c = db2.rawQuery("SELECT * FROM details", null);
-                    // c.moveToFirst();//den dong dau tap du lieu
-                    while (c.moveToNext()) {
-                        String num = c.getString(1);//gia tri sdt
-                        SmsManager smsManager = SmsManager.getDefault();
-                        smsManager.sendTextMessage(num, null,
-                                "Please help me. I need help immediately. This is where i am now:" , null, null);
-                        Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
-                        Intent callIntent = new Intent(Intent.ACTION_CALL);
-                        callIntent.setData(Uri.parse("tel:"+num));
-                        startActivity(callIntent);
+                }
 
-
-
-
-
-
-               // Intent intent = getIntent();
-               // String str = intent.getStringExtra("message_key");
-
-               //  SmsManager smsManager = SmsManager.getDefault();
-                 //  smsManager.sendTextMessage("0978831789", null,
-               //          "Please help me. I need help immediately. This is where i am now:", null, null);
-             //   Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
-
-
-             //  Intent callIntent = new Intent(Intent.ACTION_CALL);
-               // callIntent.setData(Uri.parse("tel:0909899009"));
-               // startActivity(callIntent);
             }
+        }}
 
 
-            // SmsManager smsManager = SmsManager.getDefault();
-            //smsManager.sendTextMessage(Register.getNumber(db2), null, "Please HELP me !! I am in Danger, I need your help", null, null);
 
+    private String getCompleteAddressString(Double lat, Double lng) {
+        LatLng latLng = new LatLng(lat,lng);
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
 
-        }}}
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+            } else {
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return strAdd;
+    }
 
 
     @Override
@@ -226,4 +261,8 @@ public class MyService extends Service implements SpeechDelegate, Speech.stopDue
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, 1000, service);
         super.onTaskRemoved(rootIntent);
     }
+
+
+
+
 }
