@@ -292,9 +292,6 @@ public class MainActivity extends AppCompatActivity
                alertDialog.show();
            }break;
 
-            case R.id.nav_verify:
-                fragment = new Verify();
-                break;
             case R.id.nav_register:
                 fragment = new Register();
                 break;
