@@ -51,8 +51,7 @@ public class Register extends Fragment implements View.OnClickListener {
         number.setHint("Mobile Number");*/
         String str_name = name.getText().toString();
         String str_number = number.getText().toString();
-        PhoneNumber.phoneNumber = str_number;
-        Log.d("Phone", PhoneNumber.phoneNumber);
+
         db = getActivity().openOrCreateDatabase("NumberDB", MODE_PRIVATE, null);
         //Toast.makeText(getApplicationContext(), "db created",Toast.LENGTH_LONG).show();
         //db2 = db;

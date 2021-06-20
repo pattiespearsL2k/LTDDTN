@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity
 
         btStartService = (Button) findViewById(R.id.btStartService);
         tvText = (TextView) findViewById(R.id.tvText);
-        enableAutoStart();
 
 
         if (checkServiceRunning()) {
@@ -179,30 +178,7 @@ public class MainActivity extends AppCompatActivity
         return false;
     }
 
-    private void enableAutoStart() {
-        for (Intent intent : Constants.AUTO_START_INTENTS) {
-            if (getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
-                new MaterialDialog.Builder(this).title(R.string.enable_autostart)
-                        .content(R.string.ask_permission)
-                        .theme(Theme.LIGHT)
-                        .positiveText(getString(R.string.allow))
-                        .onPositive((dialog, which) -> {
-                            try {
-                                for (Intent intent1 : Constants.AUTO_START_INTENTS)
-                                    if (getPackageManager().resolveActivity(intent1, PackageManager.MATCH_DEFAULT_ONLY)
-                                            != null) {
-                                        startActivity(intent1);
-                                        break;
-                                    }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        })
-                        .show();
-                break;
-            }
-        }
-    }
+
 
     @Override
     public void onBackPressed() {
@@ -328,22 +304,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_nearby:
                 Intent i = new Intent(MainActivity.this,MapsActivity.class);
                 startActivity(i);
-                break;
-            case R.id.nav_rate:
-                final RatingDialog ratingDialog = new RatingDialog.Builder(this)
-                        .threshold(3)
-                        .onRatingBarFormSumbit(new RatingDialog.Builder.RatingDialogFormListener() {
-                            @Override
-                            public void onFormSubmitted(String feedback) {
-
-                            }
-                        }).build();
-
-                ratingDialog.show();
-                break;
-            case R.id.nav_safety:
-                Intent intent = new Intent(MainActivity.this,Safety.class);
-                startActivity(intent);
                 break;
         }
 

@@ -4,7 +4,7 @@
     <!-- "Mark Favorite", should appear as action button if possible -->
     <item
         android:id="@+id/action_power"
-        android:icon="@drawable/power5"
+        android:icon="@drawable/power_voice"
         android:title="@string/start_service"
         app:showAsAction="ifRoom" />
 
