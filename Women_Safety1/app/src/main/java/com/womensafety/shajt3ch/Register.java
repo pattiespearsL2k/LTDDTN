@@ -1,7 +1,6 @@
 package com.womensafety.shajt3ch;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -40,7 +39,6 @@ public class Register extends Fragment implements View.OnClickListener {
         Button save = view.findViewById(R.id.save);
         save.setOnClickListener(this);
         return view;
-
     }
 
     @Override
@@ -66,7 +64,6 @@ public class Register extends Fragment implements View.OnClickListener {
             Toast.makeText(getActivity(), "Successfully Saved", Toast.LENGTH_SHORT).show();
         } else {
 
-            db.execSQL("INSERT INTO details VALUES('" + str_name + "','" + str_number + "');");
             Toast.makeText(getActivity(), "Maximun Numbers limited reached. Previous numbers are replaced.", Toast.LENGTH_SHORT).show();
         }
 
