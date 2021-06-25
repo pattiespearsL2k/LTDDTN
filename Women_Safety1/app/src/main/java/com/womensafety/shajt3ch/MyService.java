@@ -164,7 +164,7 @@ public class MyService extends Service implements SpeechDelegate, Speech.stopDue
                     String num = c.getString(1);//gia tri sdt
                     SmsManager smsManager = SmsManager.getDefault();
                     String add= getCompleteAddressString(MapsActivity.latitude, MapsActivity.longitude);
-                    smsManager.sendTextMessage("08999", null,
+                    smsManager.sendTextMessage(num, null,
                             "Please help me. I need help immediately. This is where i am now: "+MapsActivity.latitude+","+MapsActivity.longitude+" with address: "+add, null, null);
                     Toast.makeText(getApplicationContext(), "SMS sent.", Toast.LENGTH_LONG).show();
                     Intent callIntent = new Intent(Intent.ACTION_CALL);

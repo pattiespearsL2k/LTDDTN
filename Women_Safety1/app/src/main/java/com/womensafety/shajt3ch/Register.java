@@ -43,7 +43,6 @@ public class Register extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(getActivity(), "save started", Toast.LENGTH_LONG).show();
 
        /* name.setHint("Person name");
         number.setHint("Mobile Number");*/
@@ -57,9 +56,8 @@ public class Register extends Fragment implements View.OnClickListener {
         //Toast.makeText(getApplicationContext(), "table created",Toast.LENGTH_LONG).show();
 
         Cursor c = db.rawQuery("SELECT * FROM details", null);
-        if (c.getCount() < 1) {
+        if (c.getCount() < 2) {
             db.execSQL("INSERT INTO details VALUES('" + str_name + "','" + str_number + "');");
-
 
             Toast.makeText(getActivity(), "Successfully Saved", Toast.LENGTH_SHORT).show();
         } else {
